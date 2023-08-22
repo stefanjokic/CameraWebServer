@@ -34,7 +34,7 @@
 // Enter your WiFi credentials
 // ===========================
 const char* ssid = "darts-autoscorer";
-const char* password = "12345678";
+const char* password = "darts-camera";
 
 void startCameraServer();
 void setupLedFlash(int pin);
