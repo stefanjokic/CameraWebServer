@@ -33,11 +33,30 @@
 // ===========================
 // Enter your WiFi credentials
 // ===========================
-const char* ssid = "darts-autoscorer";
-const char* password = "12345678";
+const char* ssid = "darts";
+const char* password = "autoscorer";
 
 void startCameraServer();
 void setupLedFlash(int pin);
+
+String get_wifi_status(int status){
+    switch(status){
+        case WL_IDLE_STATUS:
+        return "WL_IDLE_STATUS";
+        case WL_SCAN_COMPLETED:
+        return "WL_SCAN_COMPLETED";
+        case WL_NO_SSID_AVAIL:
+        return "WL_NO_SSID_AVAIL";
+        case WL_CONNECT_FAILED:
+        return "WL_CONNECT_FAILED";
+        case WL_CONNECTION_LOST:
+        return "WL_CONNECTION_LOST";
+        case WL_CONNECTED:
+        return "WL_CONNECTED";
+        case WL_DISCONNECTED:
+        return "WL_DISCONNECTED";
+    }
+}
 
 void setup() {
   Serial.begin(115200);
@@ -130,11 +149,17 @@ void setup() {
   setupLedFlash(LED_GPIO_NUM);
 #endif
 
+  WiFi.disconnect(true);
+  scanNetworks();
   // Wi-Fi connection
   WiFi.begin(ssid, password);
+
+  int status = WL_IDLE_STATUS;
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(5000);
     Serial.print(".");
+    status = WiFi.status();
+    Serial.println(get_wifi_status(status));
   }
   Serial.println("");
   Serial.println("WiFi connected");
@@ -148,4 +173,21 @@ void setup() {
 
 void loop() {
   delay(100);
+}
+
+
+void scanNetworks() {
+  // scan for nearby networks:
+  Serial.println("** Scan Networks **");
+  byte numSsid = WiFi.scanNetworks();
+
+  // print the list of networks seen:
+  Serial.print("SSID List:");
+  Serial.println(numSsid);
+  // print the network number and name for each network found:
+  for (int thisNet = 0; thisNet<numSsid; thisNet++) {
+    Serial.print(thisNet);
+    Serial.print(") Network: ");
+    Serial.println(WiFi.SSID(thisNet));
+  }
 }

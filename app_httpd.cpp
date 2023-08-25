@@ -1203,7 +1203,7 @@ static esp_err_t index_handler(httpd_req_t *req)
 }
 
 static esp_err_t position_handler(httpd_req_t *req) {
-  const char *response = "{\"position\": 0}";
+  const char *response = "{\"position\": 1}";
   httpd_resp_set_type(req, "application/json");
   httpd_resp_send(req, response, strlen(response));
   return ESP_OK;
